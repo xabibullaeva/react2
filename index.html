@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="style/style.css">
+    <title>React</title>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        function App() {
+                const [text, setText] = React.useState('')
+                const [notes, setNotes] = React.useState(
+                    [
+                        {id: Math.random(), title: 'hello', date: new Date().toLocaleDateString()},
+                        {id: Math.random(), title: 'good', date: new Date().toLocaleDateString()},
+                        {id: Math.random(), title: 'bye', date: new Date().toLocaleDateString()}
+                    ]
+                )
+                const addNote = (e) => {
+                    e.preventDefault()
+                    const newNote = {
+                        id: Math.random(),
+                        title: text,
+                        date: new Date().toLocaleDateString()
+                    }
+                    setNotes([...notes, newNote])
+                    setText('')
+                } 
+                const delNote = (id) => {
+                    setNotes(notes.filter((note) => note.id != id))
+                };
+                return (
+                    <div className="container">
+                        <h1>TodoList</h1>
+                        <form onSubmit={addNote} >
+                            <input type="text" placeholder='Title' value={text} onchange={(e) => setText(e.target.value)}/>
+                            <button className="add">Add Note</button>
+                        </form>
+                        <div className="box">
+                            {
+                                notes.map((note) =>  (
+                                    <div className="card" key={note.id}>
+                                        <h2>Title: {note.title}</h2>
+                                        <h2>Date: {note.date} </h2>
+                                        <button className="delete" onClick={() => delNote(note.id)}>X</button>
+                                    </div>
+                                ))
+                            }       
+                        </div>
+                    </div>
+                )
+            }
+            
+        const root = document.getElementById('root')
+        const app = ReactDOM.createRoot(root)
+        app.render(<App />)
+    </script>
+</body>
+</html>
